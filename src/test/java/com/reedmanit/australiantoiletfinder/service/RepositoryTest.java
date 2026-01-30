@@ -1,6 +1,7 @@
 package com.reedmanit.australiantoiletfinder.service;
 
 import com.reedmanit.australiantoiletfinder.data.Feature;
+import com.reedmanit.australiantoiletfinder.data.Member;
 import com.reedmanit.australiantoiletfinder.data.Toilet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,7 +29,11 @@ public class RepositoryTest {
     @Autowired
     private FeatureRepository featureRepository;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
     private Toilet brisbaneToilet;
+    private Member member;
 
     @BeforeEach
     void setUp() {
@@ -38,14 +45,23 @@ public class RepositoryTest {
         brisbaneToilet.setLongitude(153.0210f);
         entityManager.persist(brisbaneToilet);
 
-        // Create a test Feature for that toilet
+        // Create a test Member
+        member = new Member();
+        member.setFirstname("Sam");
+        member.setLastname("Reedman");
+        member.setUserid("sam123");
+        entityManager.persist(member);
+
+        // Create a test Feature for that toilet (and link it to the member)
         Feature accessibleFeature = new Feature();
         accessibleFeature.setToiletId(brisbaneToilet);
         accessibleFeature.setAccessible(true);
         accessibleFeature.setBabyChange(true);
+        accessibleFeature.setMemberIdFk(member);
         entityManager.persist(accessibleFeature);
 
         entityManager.flush();
+        entityManager.clear();
     }
 
     @Test
@@ -109,5 +125,43 @@ public class RepositoryTest {
 
         assertThat(featuresById.getContent()).hasSize(1);
         assertThat(featuresById.getContent().get(0).getAccessible()).isTrue();
+    }
+
+    @Test
+    void whenFindMemberByUserid_thenReturnMember() {
+        Optional<Member> found = memberRepository.findByUserid("sam123");
+
+        assertThat(found).isPresent();
+        assertThat(found.get().getUserid()).isEqualTo("sam123");
+    }
+
+    @Test
+    void whenExistsByUserid_thenReturnTrue() {
+        boolean exists = memberRepository.existsByUserid("sam123");
+
+        assertThat(exists).isTrue();
+    }
+
+    @Test
+    void whenFindByIdWithFeatures_thenFeaturesAreFetched() {
+        Integer memberId = member.getId();
+
+        Optional<Member> found = memberRepository.findByIdWithFeatures(memberId);
+
+        assertThat(found).isPresent();
+        assertThat(found.get().getId()).isEqualTo(memberId);
+        assertThat(found.get().getFeatures()).isNotNull();
+        assertThat(found.get().getFeatures()).hasSize(1);
+    }
+
+    @Test
+    void whenFindFeaturesByMemberId_thenReturnFeatures() {
+        Integer memberId = member.getId();
+
+        List<Feature> features = memberRepository.findFeaturesByMemberId(memberId);
+
+        assertThat(features).hasSize(1);
+        assertThat(features.get(0).getMemberIdFk()).isNotNull();
+        assertThat(features.get(0).getMemberIdFk().getId()).isEqualTo(memberId);
     }
 }

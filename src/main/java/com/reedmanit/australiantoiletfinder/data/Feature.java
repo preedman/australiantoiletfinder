@@ -105,6 +105,9 @@ public class Feature {
 
     @Column(name = "\"end-date\"")
     private LocalDate endDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id_fk")
+    private Member memberIdFk;
 
     public Integer getId() {
         return id;
@@ -360,6 +363,14 @@ public class Feature {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public Member getMemberIdFk() {
+        return memberIdFk;
+    }
+
+    public void setMemberIdFk(Member memberIdFk) {
+        this.memberIdFk = memberIdFk;
     }
 
 }
