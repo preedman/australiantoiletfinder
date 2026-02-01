@@ -21,6 +21,7 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 
     List<Member> findByUseridContainingIgnoreCase(String useridPart);
 
+    /**
     @Query("""
             select distinct m
             from Member m
@@ -36,4 +37,5 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
             where m.id = :memberId
             """)
     List<Feature> findFeaturesByMemberId(@Param("memberId") Integer memberId);
+    */
 }
