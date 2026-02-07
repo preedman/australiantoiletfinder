@@ -24,6 +24,15 @@ public class Member {
 
     @OneToMany(mappedBy = "memberIdFk")
     private Set<Feature> features = new LinkedHashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "member_favourite_toilet",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "toilet_id")
+    )
+    private Set<Toilet> favouriteToilets = new LinkedHashSet<>();
+
     @Column(name = "parking")
     private Boolean parking;
     @Column(name = "\"parking-accessible\"")
@@ -81,14 +90,6 @@ public class Member {
 
     public void setUserid(String userid) {
         this.userid = userid;
-    }
-
-    public Set<Feature> getFeatures() {
-        return features;
-    }
-
-    public void setFeatures(Set<Feature> features) {
-        this.features = features;
     }
 
     public Boolean getParking() {
@@ -195,4 +196,31 @@ public class Member {
         this.unisex = unisex;
     }
 
+    public Set<Feature> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(Set<Feature> features) {
+        this.features = features;
+    }
+
+    public Set<Toilet> getFavouriteToilets() {
+        return favouriteToilets;
+    }
+
+    public void setFavouriteToilets(Set<Toilet> favouriteToilets) {
+        this.favouriteToilets = favouriteToilets;
+    }
+
+    public void addFavouriteToilet(Toilet toilet) {
+        this.favouriteToilets.add(toilet);
+        toilet.getFavouritedByMembers().add(this);
+    }
+
+    public void removeFavouriteToilet(Toilet toilet) {
+        this.favouriteToilets.remove(toilet);
+        toilet.getFavouritedByMembers().remove(this);
+    }
+
+    // ... existing code ...
 }

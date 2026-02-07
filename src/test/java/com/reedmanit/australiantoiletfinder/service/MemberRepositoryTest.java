@@ -1,6 +1,7 @@
 package com.reedmanit.australiantoiletfinder.service;
 
 import com.reedmanit.australiantoiletfinder.data.Member;
+import com.reedmanit.australiantoiletfinder.data.Toilet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +13,36 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+class MemberRepositoryTest {
 
-public class MemberRepositoryTest {
     @Autowired
     private TestEntityManager entityManager;
 
     @Autowired
     private MemberRepository memberRepository;
 
+    private Integer samId;
+    private Integer alexId;
+
+    private Integer toiletAId;
+    private Integer toiletBId;
+
     @BeforeEach
     void setUp() {
+        Toilet toiletA = new Toilet();
+        toiletA.setName("Toilet A");
+        toiletA.setTown("Brisbane");
+        toiletA.setState("QLD");
+        toiletA.setLongitude(153.0210f);
+        entityManager.persist(toiletA);
+
+        Toilet toiletB = new Toilet();
+        toiletB.setName("Toilet B");
+        toiletB.setTown("Sydney");
+        toiletB.setState("NSW");
+        toiletB.setLongitude(151.2093f);
+        entityManager.persist(toiletB);
+
         Member sam = new Member();
         sam.setFirstname("Sam");
         sam.setLastname("Reedman");
@@ -39,6 +60,16 @@ public class MemberRepositoryTest {
         alex.setLastname("Smith");
         alex.setUserid("alex_smith");
         entityManager.persist(alex);
+
+        entityManager.flush();
+
+        samId = sam.getId();
+        alexId = alex.getId();
+        toiletAId = toiletA.getId();
+        toiletBId = toiletB.getId();
+
+        sam.addFavouriteToilet(toiletA);
+        sam.addFavouriteToilet(toiletB);
 
         entityManager.flush();
         entityManager.clear();
@@ -88,5 +119,21 @@ public class MemberRepositoryTest {
 
         assertThat(found).hasSize(1);
         assertThat(found.get(0).getUserid()).isEqualTo("alex_smith");
+    }
+
+    @Test
+    void findByIdWithFavouriteToilets_fetchesFavouritesInSameQuery() {
+        Member sam = memberRepository.findByIdWithFavouriteToilets(samId).orElseThrow();
+
+        assertThat(sam.getFavouriteToilets())
+                .extracting(Toilet::getId)
+                .containsExactlyInAnyOrder(toiletAId, toiletBId);
+    }
+
+    @Test
+    void findByIdWithFavouriteToilets_returnsEmptySetWhenNoFavourites() {
+        Member alex = memberRepository.findByIdWithFavouriteToilets(alexId).orElseThrow();
+
+        assertThat(alex.getFavouriteToilets()).isEmpty();
     }
 }

@@ -38,4 +38,14 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
             """)
     List<Feature> findFeaturesByMemberId(@Param("memberId") Integer memberId);
     */
+
+    @Query("""
+            select distinct m
+            from Member m
+            left join fetch m.favouriteToilets
+            where m.id = :id
+            """)
+    Optional<Member> findByIdWithFavouriteToilets(@Param("id") Integer id);
+
+    // ... existing code ...
 }

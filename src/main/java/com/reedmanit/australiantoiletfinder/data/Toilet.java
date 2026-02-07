@@ -74,6 +74,9 @@ public class Toilet {
     @OneToMany(mappedBy = "toiletId")
     private Set<Feature> features = new LinkedHashSet<>();
 
+    @ManyToMany(mappedBy = "favouriteToilets")
+    private Set<Member> favouritedByMembers = new LinkedHashSet<>();
+
     public Integer getId() {
         return id;
     }
@@ -242,4 +245,11 @@ public class Toilet {
         this.features = features;
     }
 
+    public Set<Member> getFavouritedByMembers() {
+        return favouritedByMembers;
+    }
+
+    public void setFavouritedByMembers(Set<Member> favouritedByMembers) {
+        this.favouritedByMembers = favouritedByMembers;
+    }
 }
