@@ -19,6 +19,8 @@ actor "User" as user rectangle "Toilet Finder Web App
 user --> system : Search / Filter / View details (HTTP) system --> db : Read toilet + feature data (JPA) system <-- geo : User location (lat/lon) (optional)
 @enduml
 
+
+
 ### 3.2 Container View (C4: Containers)
 
 - **Web container:** Spring Boot app hosting:
@@ -65,6 +67,9 @@ controllers --> jsp : Model -> JSP render jsp --> browser : HTML response
 
 ### 5.2 Service Layer
 
+
+
+
 **Responsibilities**
 
 - Orchestrate queries and business rules (geo bounding box, filter criteria, paging)
@@ -109,7 +114,9 @@ controllers --> jsp : Model -> JSP render jsp --> browser : HTML response
 ### Flow 1: Search by location
 
 plantuml @startuml title Sequence - Search by Location (Radius)
+
 actor User participant "Browser (JSP UI)" as Browser participant "SearchController" as C participant "ToiletSearchService" as S participant "ToiletRepository" as R database "DB" as DB
+
 User -> Browser : Enter location + radius
 Submit Browser -> C : GET/POST /search/results?lat&lon&radius&page C -> C : Validate inputs (lat/lon range, radius) C -> S : searchWithinRadius(lat, lon, radius, pageable) S -> S : Compute bounding box (minLat/maxLat/minLon/maxLon) S -> R : findWithinRadiusKm(lat, lon, radius,
 minLat,maxLat,minLon,maxLon) R -> DB : Execute query DB --> R : Matching toilets R --> S : List/Page S --> C : Results model C --> Browser : Render results.jsp (HTML)
