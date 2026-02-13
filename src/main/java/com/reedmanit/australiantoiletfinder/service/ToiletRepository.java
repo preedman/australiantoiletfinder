@@ -33,6 +33,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Integer> {
     // Single result doesn't usually need paging
     Toilet findByFacilityid(Integer facilityid);
 
+    // No extra method required for paging all toilets:
+    // Page<Toilet> findAll(Pageable pageable) is inherited.
+
     /**
      * PostgreSQL native query:
      *  - Bounding box pre-filter (fast)
