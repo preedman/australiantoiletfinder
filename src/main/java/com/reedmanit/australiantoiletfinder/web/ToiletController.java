@@ -58,4 +58,12 @@ public class ToiletController {
         model.addAttribute("feature", feature);
         return "toilets/features";
     }
+
+    @GetMapping("/{id}/notes")
+    public String toiletNotes(@PathVariable Integer id, Model model) {
+        Toilet toilet = toiletRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Toilet not found: " + id));
+        model.addAttribute("toilet", toilet);
+        return "toilets/toiletnotes";
+    }
 }

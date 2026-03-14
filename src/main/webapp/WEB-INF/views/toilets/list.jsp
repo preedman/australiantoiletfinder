@@ -17,6 +17,11 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        .wrap {
+            max-width: 260px;
+            white-space: normal;
+            word-wrap: break-word;
+        }
         th, td { vertical-align: top; }
     </style>
 </head>
@@ -24,9 +29,15 @@
 <div class="container-fluid py-4">
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h1 class="h3 mb-0">Toilets</h1>
-        <span class="text-muted">
-            Total: <c:out value="${toiletPage.totalElements}"/>
-        </span>
+        <div class="d-flex align-items-center gap-3">
+            <span class="text-muted">
+                Total: <c:out value="${toiletPage.totalElements}"/>
+            </span>
+            <form action="${pageContext.request.contextPath}/logout" method="post" class="mb-0">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
+            </form>
+        </div>
     </div>
 
     <div class="card shadow-sm">
@@ -44,17 +55,6 @@
                         <th>address1</th>
                         <th>town</th>
                         <th>state</th>
-                        <th>addressNote</th>
-                        <th>latitude</th>
-                        <th>longitude</th>
-                        <th>parkingNote</th>
-                        <th>accessNote</th>
-                        <th>adultChangeNote</th>
-                        <th>babyChangeNote</th>
-                        <th>dumpPointNote</th>
-                        <th>openingHours</th>
-                        <th>openingHoursNote</th>
-                        <th>toiletNote</th>
                         <th>startDate</th>
                         <th>endDate</th>
                     </tr>
@@ -67,6 +67,10 @@
                                 <a class="btn btn-outline-primary btn-sm"
                                    href="${pageContext.request.contextPath}/toilets/${t.id}/features">
                                     Features
+                                </a>
+                                <a class="btn btn-outline-info btn-sm"
+                                   href="${pageContext.request.contextPath}/toilets/${t.id}/notes">
+                                    Notes
                                 </a>
                             </td>
 
@@ -89,20 +93,6 @@
                             <td><c:out value="${t.town}"/></td>
                             <td><c:out value="${t.state}"/></td>
 
-                            <td class="truncate"><c:out value="${t.addressNote}"/></td>
-                            <td><c:out value="${t.latitude}"/></td>
-                            <td><c:out value="${t.longitude}"/></td>
-
-                            <td class="truncate"><c:out value="${t.parkingNote}"/></td>
-                            <td class="truncate"><c:out value="${t.accessNote}"/></td>
-                            <td class="truncate"><c:out value="${t.adultChangeNote}"/></td>
-                            <td class="truncate"><c:out value="${t.babyChangeNote}"/></td>
-                            <td class="truncate"><c:out value="${t.dumpPointNote}"/></td>
-
-                            <td class="truncate"><c:out value="${t.openingHours}"/></td>
-                            <td class="truncate"><c:out value="${t.openingHoursNote}"/></td>
-                            <td class="truncate"><c:out value="${t.toiletNote}"/></td>
-
                             <td><c:out value="${t.startDate}"/></td>
                             <td><c:out value="${t.endDate}"/></td>
                         </tr>
@@ -110,7 +100,7 @@
 
                     <c:if test="${toiletPage.totalElements == 0}">
                         <tr>
-                            <td colspan="21" class="text-center text-muted py-4">
+                            <td colspan="10" class="text-center text-muted py-4">
                                 No toilets found.
                             </td>
                         </tr>
