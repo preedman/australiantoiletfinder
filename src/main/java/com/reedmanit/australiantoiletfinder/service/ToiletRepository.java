@@ -58,6 +58,15 @@ public interface ToiletRepository extends JpaRepository<Toilet, Integer> {
                   ))
               )
           ) <= :radiusKm
+        ORDER BY (
+              6371.0 * acos(
+                  least(1.0, greatest(-1.0,
+                      cos(radians(:lat)) * cos(radians(t.latitude)) *
+                      cos(radians(t.longitude) - radians(:lon)) +
+                      sin(radians(:lat)) * sin(radians(t.latitude))
+                  ))
+              )
+          ) ASC
         """, nativeQuery = true)
     List<Toilet> findWithinRadiusKm(
             @Param("lat") double lat,
