@@ -68,12 +68,29 @@
                     <c:forEach items="${toiletPage.content}" var="t">
                         <tr>
                             <td class="text-nowrap">
+                                <c:url var="featureUrl" value="/toilets/${t.id}/features">
+                                    <c:param name="page" value="${toiletPage.number}"/>
+                                    <c:param name="size" value="${toiletPage.size}"/>
+                                    <c:if test="${not empty lat}">
+                                        <c:param name="lat" value="${lat}"/>
+                                        <c:param name="lon" value="${lon}"/>
+                                    </c:if>
+                                </c:url>
                                 <a class="btn btn-outline-primary btn-sm"
-                                   href="${pageContext.request.contextPath}/toilets/${t.id}/features">
+                                   href="${featureUrl}">
                                     Features
                                 </a>
+
+                                <c:url var="notesUrl" value="/toilets/${t.id}/notes">
+                                    <c:param name="page" value="${toiletPage.number}"/>
+                                    <c:param name="size" value="${toiletPage.size}"/>
+                                    <c:if test="${not empty lat}">
+                                        <c:param name="lat" value="${lat}"/>
+                                        <c:param name="lon" value="${lon}"/>
+                                    </c:if>
+                                </c:url>
                                 <a class="btn btn-outline-info btn-sm"
-                                   href="${pageContext.request.contextPath}/toilets/${t.id}/notes">
+                                   href="${notesUrl}">
                                     Notes
                                 </a>
                             </td>

@@ -28,8 +28,20 @@
             </div>
         </div>
 
+        <c:url var="backUrl" value="/toilets${not empty lat ? '/nearby' : ''}">
+            <c:if test="${not empty page}">
+                <c:param name="page" value="${page}"/>
+            </c:if>
+            <c:if test="${not empty size}">
+                <c:param name="size" value="${size}"/>
+            </c:if>
+            <c:if test="${not empty lat}">
+                <c:param name="lat" value="${lat}"/>
+                <c:param name="lon" value="${lon}"/>
+            </c:if>
+        </c:url>
         <a class="btn btn-outline-secondary"
-           href="${pageContext.request.contextPath}/toilets">
+           href="${backUrl}">
             Back to list
         </a>
     </div>

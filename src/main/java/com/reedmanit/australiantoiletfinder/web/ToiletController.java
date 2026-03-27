@@ -67,7 +67,12 @@ public class ToiletController {
 
     @Transactional(readOnly = true)
     @GetMapping("/{id}/features")
-    public String toiletFeatures(@PathVariable Integer id, Model model) {
+    public String toiletFeatures(@PathVariable Integer id,
+                                 @RequestParam(required = false) Double lat,
+                                 @RequestParam(required = false) Double lon,
+                                 @RequestParam(required = false) Integer page,
+                                 @RequestParam(required = false) Integer size,
+                                 Model model) {
         Toilet toilet = toiletRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Toilet not found: " + id));
 
@@ -89,14 +94,27 @@ public class ToiletController {
 
         model.addAttribute("toilet", toilet);
         model.addAttribute("feature", feature);
+        model.addAttribute("lat", lat);
+        model.addAttribute("lon", lon);
+        model.addAttribute("page", page);
+        model.addAttribute("size", size);
         return "toilets/features";
     }
 
     @GetMapping("/{id}/notes")
-    public String toiletNotes(@PathVariable Integer id, Model model) {
+    public String toiletNotes(@PathVariable Integer id,
+                              @RequestParam(required = false) Double lat,
+                              @RequestParam(required = false) Double lon,
+                              @RequestParam(required = false) Integer page,
+                              @RequestParam(required = false) Integer size,
+                              Model model) {
         Toilet toilet = toiletRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Toilet not found: " + id));
         model.addAttribute("toilet", toilet);
+        model.addAttribute("lat", lat);
+        model.addAttribute("lon", lon);
+        model.addAttribute("page", page);
+        model.addAttribute("size", size);
         return "toilets/toiletnotes";
     }
 }

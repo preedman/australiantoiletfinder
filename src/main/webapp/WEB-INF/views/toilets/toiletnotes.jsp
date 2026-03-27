@@ -19,7 +19,19 @@
 <div class="container py-4">
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h1 class="h3 mb-0">Notes for <c:out value="${toilet.name}"/></h1>
-        <a href="${pageContext.request.contextPath}/toilets" class="btn btn-outline-secondary">Back to List</a>
+        <c:url var="backUrl" value="/toilets${not empty lat ? '/nearby' : ''}">
+            <c:if test="${not empty page}">
+                <c:param name="page" value="${page}"/>
+            </c:if>
+            <c:if test="${not empty size}">
+                <c:param name="size" value="${size}"/>
+            </c:if>
+            <c:if test="${not empty lat}">
+                <c:param name="lat" value="${lat}"/>
+                <c:param name="lon" value="${lon}"/>
+            </c:if>
+        </c:url>
+        <a href="${backUrl}" class="btn btn-outline-secondary">Back to List</a>
     </div>
 
     <div class="card shadow-sm">
