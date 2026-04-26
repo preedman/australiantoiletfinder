@@ -18,7 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Controller
-@RequestMapping("/toilets")
+@RequestMapping("/")
 
 
 public class ToiletController {
@@ -30,7 +30,7 @@ public class ToiletController {
         this.toiletSearchService = toiletSearchService;
     }
 
-    @GetMapping
+    @GetMapping({"/", "/listToilets"})
     public String listToilets(@PageableDefault(size = 10) Pageable pageable, Model model) {
         Page<Toilet> toiletPage = toiletRepository.findAll(pageable);
         model.addAttribute("toiletPage", toiletPage);

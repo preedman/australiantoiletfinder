@@ -19,7 +19,7 @@
 <div class="container py-4">
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h1 class="h3 mb-0">Notes for <c:out value="${toilet.name}"/></h1>
-        <c:url var="backUrl" value="/toilets${not empty lat ? '/nearby' : ''}">
+        <c:url var="backUrl" value="${not empty lat ? '/nearby' : '/listToilets'}">
             <c:if test="${not empty page}">
                 <c:param name="page" value="${page}"/>
             </c:if>

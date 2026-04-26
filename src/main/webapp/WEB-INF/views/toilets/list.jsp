@@ -31,7 +31,7 @@
         <h1 class="h3 mb-0">Toilets</h1>
         <div class="d-flex align-items-center gap-3">
             <c:if test="${not empty lat}">
-                <a href="${pageContext.request.contextPath}/toilets" class="btn btn-outline-secondary btn-sm">Refresh</a>
+                <a href="${pageContext.request.contextPath}/listToilets" class="btn btn-outline-secondary btn-sm">Refresh</a>
             </c:if>
             <button id="findNearbyBtn" class="btn btn-primary btn-sm">Find Nearby</button>
             <span class="text-muted">
@@ -68,7 +68,7 @@
                     <c:forEach items="${toiletPage.content}" var="t">
                         <tr>
                             <td class="text-nowrap">
-                                <c:url var="featureUrl" value="/toilets/${t.id}/features">
+                                <c:url var="featureUrl" value="${t.id}/features">
                                     <c:param name="page" value="${toiletPage.number}"/>
                                     <c:param name="size" value="${toiletPage.size}"/>
                                     <c:if test="${not empty lat}">
@@ -81,7 +81,7 @@
                                     Features
                                 </a>
 
-                                <c:url var="notesUrl" value="/toilets/${t.id}/notes">
+                                <c:url var="notesUrl" value="${t.id}/notes">
                                     <c:param name="page" value="${toiletPage.number}"/>
                                     <c:param name="size" value="${toiletPage.size}"/>
                                     <c:if test="${not empty lat}">
@@ -136,7 +136,7 @@
                     <ul class="pagination justify-content-center mb-0">
 
                         <li class="page-item <c:out value='${toiletPage.first ? "disabled" : ""}'/>">
-                            <c:url var="prevUrl" value="/toilets${not empty lat ? '/nearby' : ''}">
+                            <c:url var="prevUrl" value="${not empty lat ? '/nearby' : '/listToilets'}">
                                 <c:param name="page" value="${toiletPage.number - 1}"/>
                                 <c:param name="size" value="${toiletPage.size}"/>
                                 <c:if test="${not empty lat}">
@@ -165,7 +165,7 @@
 
                         <c:forEach var="i" begin="${start}" end="${end}">
                             <li class="page-item <c:out value='${i == current ? "active" : ""}'/>">
-                                <c:url var="pUrl" value="/toilets${not empty lat ? '/nearby' : ''}">
+                                <c:url var="pUrl" value="${not empty lat ? '/nearby' : '/listToilets'}">
                                     <c:param name="page" value="${i}"/>
                                     <c:param name="size" value="${toiletPage.size}"/>
                                     <c:if test="${not empty lat}">
@@ -180,7 +180,7 @@
                         </c:forEach>
 
                         <li class="page-item <c:out value='${toiletPage.last ? "disabled" : ""}'/>">
-                            <c:url var="nextUrl" value="/toilets${not empty lat ? '/nearby' : ''}">
+                            <c:url var="nextUrl" value="${not empty lat ? '/nearby' : '/listToilets'}">
                                 <c:param name="page" value="${toiletPage.number + 1}"/>
                                 <c:param name="size" value="${toiletPage.size}"/>
                                 <c:if test="${not empty lat}">
@@ -219,7 +219,7 @@
                 const lat = position.coords.latitude;
                 const lon = position.coords.longitude;
                 // Redirect to a nearby search endpoint (to be implemented)
-                window.location.href = '${pageContext.request.contextPath}/toilets/nearby?lat=' + lat + '&lon=' + lon;
+                window.location.href = '${pageContext.request.contextPath}/nearby?lat=' + lat + '&lon=' + lon;
             },
             function (error) {
                 btn.disabled = false;

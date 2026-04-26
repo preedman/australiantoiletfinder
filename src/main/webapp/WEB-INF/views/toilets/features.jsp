@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <c:url var="backUrl" value="/toilets${not empty lat ? '/nearby' : ''}">
+        <c:url var="backUrl" value="${not empty lat ? '/nearby' : '/listToilets'}">
             <c:if test="${not empty page}">
                 <c:param name="page" value="${page}"/>
             </c:if>
