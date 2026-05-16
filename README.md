@@ -13,6 +13,7 @@ The first version (v0.0.1) of this project has been **successfully deployed**. I
 -   **Features View:** Detailed information about specific toilet features (e.g., adult change, baby change, etc.).
 -   **Notes View:** Specific notes for each toilet, such as access, parking, and opening hours.
 -   **User Authentication:** Basic logout functionality integrated with Spring Security.
+-   **Technical Documentation:** Detailed documentation for [JSP Views](src/documentation/JSP_DOCUMENTATION.md).
 
 ## Technologies Used
 
