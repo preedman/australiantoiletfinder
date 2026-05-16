@@ -52,15 +52,11 @@
                     <tr>
                         <th>Actions</th>
 
-                        <th>id</th>
-                        <th>facilityid</th>
                         <th>url</th>
                         <th>name</th>
-                        <th>address1</th>
+                        <th>address</th>
                         <th>town</th>
                         <th>state</th>
-                        <th>startDate</th>
-                        <th>endDate</th>
                     </tr>
                     </thead>
 
@@ -95,9 +91,6 @@
                                 </a>
                             </td>
 
-                            <td><c:out value="${t.id}"/></td>
-                            <td><c:out value="${t.facilityid}"/></td>
-
                             <td class="truncate">
                                 <c:choose>
                                     <c:when test="${not empty t.url}">
@@ -113,15 +106,12 @@
                             <td class="truncate"><c:out value="${t.address1}"/></td>
                             <td><c:out value="${t.town}"/></td>
                             <td><c:out value="${t.state}"/></td>
-
-                            <td><c:out value="${t.startDate}"/></td>
-                            <td><c:out value="${t.endDate}"/></td>
                         </tr>
                     </c:forEach>
 
                     <c:if test="${toiletPage.totalElements == 0}">
                         <tr>
-                            <td colspan="10" class="text-center text-muted py-4">
+                            <td colspan="6" class="text-center text-muted py-4">
                                 No toilets found.
                             </td>
                         </tr>
